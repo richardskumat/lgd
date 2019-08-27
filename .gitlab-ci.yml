@@ -23,31 +23,28 @@ build_d10:
   stage: build
   script:
     # https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
-    - docker build --rm -f Dockerfile-debian10 -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:10 -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:buster .
+    - docker build --rm -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:10 -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:buster .
 
-build_dsid:
-  stage: build
-  script:
-    # https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
-    - docker build --rm -f Dockerfile-debiansid -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:sid -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:unstable .
-
-push_dsid:
+push_to_gitlab_reg:
  stage: push
  only:
    - master
  script:
-   - docker build --rm -f Dockerfile-debiansid -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:sid -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:unstable .
+   - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+   - docker build --rm -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:10 -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:buster -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest .
    - docker images
-   - docker push $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:sid
-   - docker push $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:unstable
+   - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:10
+   - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:buster
+   - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
 
-push_d10:
+push_to_dockerhub_reg:
  stage: push
  only:
    - master
  script:
-   - docker build --rm -f Dockerfile-debian10 -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:10 -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:buster -t $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:latest .
+   - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USER" --password-stdin
+   - docker build --rm -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:10 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:buster -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest .
    - docker images
-   - docker push $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:10
-   - docker push $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:buster
-   - docker push $CI_REGISTRY_USER/$CI_REGISTRY_IMAGE:latest
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:10
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:buster
+   - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest
