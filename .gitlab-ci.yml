@@ -31,12 +31,12 @@ push_to_docker_reg:
    - master
  script:
    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
-   - docker build --rm -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:10 -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:buster -t $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:10 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:buster -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest .
+   - docker build --rm -t $CI_REGISTRY_IMAGE:10 -t $CI_REGISTRY_IMAGE:buster -t $CI_REGISTRY_IMAGE:latest -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:10 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:buster -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest .
    - docker images
-   - docker run --rm $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:10 lgogdownloader --version
-   - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:10
-   - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:buster
-   - docker push $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
+   - docker run --rm $CI_REGISTRY_IMAGE:10 lgogdownloader --version
+   - docker push $CI_REGISTRY_IMAGE:10
+   - docker push $CI_REGISTRY_IMAGE:buster
+   - docker push $CI_REGISTRY_IMAGE:latest
    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USER" --password-stdin
    - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:10
    - docker push $DOCKERHUB_USER/$DOCKERHUB_PROJECT:buster
