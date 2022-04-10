@@ -8,6 +8,12 @@ This image contains lgogdownloader and runs as user(uid 1000,gid 1000) for now.
 
 This image is updated frequently.
 
+## Recommended tags
+
+latest or unstable
+
+## Example usage
+
 Interactive example usage, with volume mapping for $HOME and /home/data, which
 results in a bash prompt in the container:
 
