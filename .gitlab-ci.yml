@@ -29,7 +29,7 @@ push_to_docker_reg:
  only:
    - master
  script:
-   - docker build -f Dockerfile-11 --rm -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:11 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:bullseye -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest .
+   - docker build -f Dockerfile-11 --rm -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:11 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:bullseye -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:stable .
    - docker build -f Dockerfile-sid --rm -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:sid -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:unstable .
    - docker images
    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USER" --password-stdin
