@@ -1,8 +1,8 @@
 ---
-#image: qwe1/debdocker:23.0
+#image: qwe1/debdocker:24.0
 image: crazymax/docker:latest
 services:
-  - name: docker:23.0-dind
+  - name: docker:24.0-dind
     command: ["--experimental"]
 
 variables:
@@ -38,10 +38,10 @@ build:
   stage: build
   script:
     # https://docs.gitlab.com/ee/ci/variables/predefined_variables.html
-    - docker buildx build --load -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:11 -f Dockerfile-11 --platform linux/amd64 .
+    - docker buildx build --load -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:12 -f Dockerfile-12 --platform linux/amd64 .
     - docker buildx build --load -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:sid -f Dockerfile-sid --platform linux/amd64 .
     - docker images
-    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:11 lgogdownloader --version
+    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:12 lgogdownloader --version
     - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:sid lgogdownloader --version
 
 push_to_docker_reg:
@@ -49,7 +49,7 @@ push_to_docker_reg:
  only:
    - master
  script:
-   - docker buildx build --push -f Dockerfile-11 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:11 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:bullseye -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:stable --platform linux/amd64,linux/arm/v7,linux/arm64 .
+   - docker buildx build --push -f Dockerfile-12 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:12 -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:bookworm -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:latest -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:stable --platform linux/amd64,linux/arm/v7,linux/arm64 .
    - docker buildx build --push -f Dockerfile-sid -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:sid -t $DOCKERHUB_USER/$DOCKERHUB_PROJECT:unstable --platform linux/amd64,linux/arm/v7,linux/arm64 .
-   - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:11 lgogdownloader --version
+   - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:12 lgogdownloader --version
    - docker run --rm $DOCKERHUB_USER/$DOCKERHUB_PROJECT:sid lgogdownloader --version
